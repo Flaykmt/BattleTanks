@@ -64,7 +64,7 @@ function addTank(i: number, j: number) {
 .field {
 	display: flex;
 	justify-content: space-between;
-	&-player {
+	&-player {	и 
 		h2 {
 			font-size: 40px;
 		}
