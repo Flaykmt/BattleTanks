@@ -5,10 +5,10 @@
 			<div class="field-player-ground">
 				<div class="field_cell" v-for="(item, idx) in cell" :key="idx">
 					<div
-						:class="{'active': checkTank(idx, index)}"
+						:class="{ active: checkTank(idx, index) }"
 						class="field_cell"
 						v-for="(cell, index) in item"
-						@click="addTank(idx, index)"
+						@click="addTank(idx, index, stage)"
 						:key="index"
 					></div>
 				</div>
@@ -19,6 +19,19 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
+import { storeToRefs } from 'pinia'
+
+// Tank
+import { useTankStore } from '@/store/tanks'
+const { tanks } = storeToRefs(useTankStore())
+const { addTank } = useTankStore()
+
+// Stage
+import { useStageStore } from '@/store/stage'
+const store = useStageStore()
+const { stage } = storeToRefs(store)
+
+
 
 // --- КЛЕТКИ ---
 // Отрисовка клеток через двумерный массив
@@ -30,33 +43,13 @@ for (let i = 0; i < 10; i++) {
 		cell[i].push({})
 	}
 }
-
-// --- ТАНКИ ---
-interface ITank {
-	x: number
-	y: number
-}
-
 // Проверяем есть ли танки на поле чтобы мы смогли дать Div класс active(окрашивается в зеленый)
 function checkTank(x: number, y: number) {
-	for (let tank of tanks) {
+	for (let tank of tanks.value) {
 		if (tank.x === x && tank.y === y) {
 			return true
 		}
 	}
-}
-
-const tanks: Array<ITank> = reactive([])
-
-// Добавление танков (Уберу в Pinia)
-function addTank(i: number, j: number) {
-	const tank = tanks.find((tank) =>  tank.x === i && tank.y === j)
-	if (tank) {
-			const index = tanks.indexOf(tank)
-			tanks.splice(index, 1)
-		} else {
-			tanks.length !== 10 ? tanks.push({x: i, y: j}) : console.log('Нельзя поставить больше 10 танков');
-		}
 }
 </script>
 
@@ -64,8 +57,8 @@ function addTank(i: number, j: number) {
 .field {
 	display: flex;
 	justify-content: space-between;
-	&-player {	и 
-		h2 {
+	&-player {
+		и h2 {
 			font-size: 40px;
 		}
 		&-ground {
