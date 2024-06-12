@@ -4,9 +4,10 @@ import { ITank } from '../interface/Tank'
 import { ref } from 'vue'
 
 export const useStageStore = defineStore('stage', () => {
-
+	// --- ЭТАПЫ ---
 	const stage = ref<Stage>(Stage.Preparation)
 
+	// Поменять этап
 	function switchStage(tanks: Array<ITank>) {
 		if (tanks.length === 10) {
 			stage.value === Stage.Preparation
